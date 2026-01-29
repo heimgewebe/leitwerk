@@ -2,6 +2,7 @@ name: Guard contracts mirror
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   guard-contracts-mirror:
@@ -17,5 +18,4 @@ jobs:
       - name: Guard contracts mirror
         env:
           BASE_REF: ${{ github.base_ref }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
         run: bash scripts/guard_contracts_mirror.sh

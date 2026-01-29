@@ -26,7 +26,7 @@ PRs, die Dateien in `contracts/` ändern, müssen enthalten:
 - eine Referenz auf die metarepo-Quelle (Commit/SHA/Tag) als Zeile, die exakt mit
   `SYNC_SOURCE:` beginnt (mindestens ein Whitespace nach dem Doppelpunkt).
 Direkte inhaltliche Contract-Änderungen in diesem Repo sind unerwünscht; nur Spiegelstände.
-Die Sync-Quelle wird im PR-/Commit-Text oder in `contracts/SYNC_SOURCE.txt` bzw.
+Die Sync-Quelle wird im PR-/Commit-Text oder in `contracts/SYNC_SOURCE.txt` oder
 `.sync/contracts_source.txt` erwartet.
 
 ## Validator-Hinweis

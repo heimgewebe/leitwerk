@@ -16,18 +16,19 @@ if [[ -n "${GITHUB_EVENT_PATH:-}" && -f "${GITHUB_EVENT_PATH}" ]]; then
 import json
 import os
 
-event_path = os.environ.get("GITHUB_EVENT_PATH")
-if not event_path:
+event_path = os.environ["GITHUB_EVENT_PATH"]
+try:
+    with open(event_path, "r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+    pull_request = payload.get("pull_request") or {}
+    base_sha = pull_request.get("base", {}).get("sha") or ""
+    head_sha = pull_request.get("head", {}).get("sha") or ""
+    if base_sha:
+        print(f"BASE_SHA={base_sha}")
+    if head_sha:
+        print(f"HEAD_SHA={head_sha}")
+except (OSError, json.JSONDecodeError, KeyError):
     raise SystemExit(0)
-with open(event_path, "r", encoding="utf-8") as handle:
-    payload = json.load(handle)
-pull_request = payload.get("pull_request") or {}
-base_sha = pull_request.get("base", {}).get("sha") or ""
-head_sha = pull_request.get("head", {}).get("sha") or ""
-if base_sha:
-    print(f"BASE_SHA={base_sha}")
-if head_sha:
-    print(f"HEAD_SHA={head_sha}")
 PY
   )"
   event_status=$?
@@ -92,22 +93,23 @@ import json
 import os
 import re
 
-event_path = os.environ.get("GITHUB_EVENT_PATH")
-if not event_path:
+event_path = os.environ["GITHUB_EVENT_PATH"]
+try:
+    with open(event_path, "r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+    body = ""
+    pull_request = payload.get("pull_request")
+    if isinstance(pull_request, dict):
+        body = pull_request.get("body") or ""
+    match = None
+    for line in body.splitlines():
+        if re.match(r"^SYNC_SOURCE:[ \t]+.+$", line):
+            match = line
+            break
+    if match:
+        print(match)
+except (OSError, json.JSONDecodeError, KeyError):
     raise SystemExit(0)
-with open(event_path, "r", encoding="utf-8") as handle:
-    payload = json.load(handle)
-body = ""
-pull_request = payload.get("pull_request")
-if isinstance(pull_request, dict):
-    body = pull_request.get("body") or ""
-match = None
-for line in body.splitlines():
-    if re.match(r"^SYNC_SOURCE:[ \t]+.+$", line):
-        match = line
-        break
-if match:
-    print(match)
 PY
   )"
   if has_sync_source_line "${pr_body}"; then
@@ -145,8 +147,8 @@ fi
 if [[ -z "${sync_found}" ]]; then
   cat <<'EOF'
 contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle.
-Füge eine Zeile hinzu: SYNC_SOURCE: <wert>
-Erlaubte Orte: PR-Body, Commit-Message oder contracts/SYNC_SOURCE.txt bzw. .sync/contracts_source.txt
+Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)
+Erlaubte Orte: PR-Body, Commit-Message oder contracts/SYNC_SOURCE.txt oder .sync/contracts_source.txt
 Beispiel: examples/sample-sync-note.md
 EOF
   printf '%s\n' "Geänderte Dateien unter contracts/:"
