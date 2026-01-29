@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:heimgewebe:contracts:artifacts:pr.manifest.v1",
+  "title": "pr.manifest.v1",
+  "type": "object",
+  "description": "Schema for pr.manifest.v1 artifacts.",
+  "additionalProperties": true,
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "pr.manifest.v1"
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "digest": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "version",
+    "ts",
+    "task_id",
+    "producer",
+    "digest"
+  ]
+}

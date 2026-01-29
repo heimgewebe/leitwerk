@@ -1,0 +1,6 @@
+--- a/contracts/artifacts/plan.v1.schema.json
++++ b/contracts/artifacts/plan.v1.schema.json
+@@
+-  "required": ["version", "ts", "task_id", "producer"]
++  "required": ["version", "ts", "task_id", "producer", "digest"]
+ }

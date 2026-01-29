@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:heimgewebe:contracts:artifacts:uncertainty.report.v1",
+  "title": "uncertainty.report.v1",
+  "type": "object",
+  "description": "Schema for uncertainty.report.v1 artifacts.",
+  "additionalProperties": true,
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "uncertainty.report.v1"
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "digest": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "version",
+    "ts",
+    "task_id",
+    "producer",
+    "digest"
+  ]
+}
