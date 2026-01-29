@@ -30,11 +30,7 @@ try:
 except (OSError, json.JSONDecodeError, KeyError):
     raise SystemExit(0)
 PY
-  )"
-  event_status=$?
-  if [[ ${event_status} -ne 0 ]]; then
-    event_info=""
-  fi
+  )" || event_info=""
   if [[ -n "${event_info}" ]]; then
     base_sha="$(echo "${event_info}" | sed -n 's/^BASE_SHA=//p')"
     head_sha="$(echo "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
