@@ -3,7 +3,7 @@
   "ts": "2024-01-01T00:00:00Z",
   "task_id": "task-001",
   "producer": "leitwerk",
-  "digest": "sha256:sample",
+  "digest": "sha256:aaaaaaaaaaaaaaaa",
   "goal": "Validierungsschema für Artifact X vereinheitlichen",
   "steps": [
     {

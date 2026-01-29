@@ -5,33 +5,17 @@
   "type": "object",
   "description": "Schema for execution.log.v1 artifacts.",
   "additionalProperties": true,
-  "properties": {
-    "version": {
-      "type": "string",
-      "const": "execution.log.v1"
+  "allOf": [
+    {
+      "$ref": "urn:heimgewebe:contracts:fragments:artifact.header.v1"
     },
-    "ts": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "task_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "producer": {
-      "type": "string",
-      "minLength": 1
-    },
-    "digest": {
-      "type": "string",
-      "minLength": 1
+    {
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "execution.log.v1"
+        }
+      }
     }
-  },
-  "required": [
-    "version",
-    "ts",
-    "task_id",
-    "producer",
-    "digest"
   ]
 }
