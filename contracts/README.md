@@ -15,3 +15,23 @@ Wenn ein Schema hier liegt, gilt:
 
 Dieses Verzeichnis dient der Auffindbarkeit und normativen Einordnung.
 Es ersetzt keine zentrale Contract-Registry.
+
+## Sync-Regel
+
+`contracts/` ist ein read-only Spiegel der kanonischen Contracts aus dem **metarepo**.
+Änderungen erfolgen **zuerst im metarepo**, danach werden sie hier gespiegelt.
+
+PRs, die Dateien in `contracts/` ändern, müssen enthalten:
+- eine Sync-Begründung (warum dieser Spiegelstand nötig ist) und
+- eine Referenz auf die metarepo-Quelle (Commit/SHA/Tag) als Zeile, die exakt mit
+  `SYNC_SOURCE:` beginnt (mindestens ein Whitespace nach dem Doppelpunkt).
+Direkte inhaltliche Contract-Änderungen in diesem Repo sind unerwünscht; nur Spiegelstände.
+Die Sync-Quelle wird im PR-/Commit-Text oder in `contracts/SYNC_SOURCE.txt` oder
+`.sync/contracts_source.txt` erwartet.
+
+## Validator-Hinweis
+
+Schemas nutzen URN-`$ref` (z. B. `urn:heimgewebe:contracts:fragments:...`).
+Validatoren müssen dafür eine Schema-Registry laden (z. B. Ajv über `addSchema`,
+`getSchema`, die `schemas`-Option oder asynchrones `loadSchema`), sonst schlagen
+lokale Validierungen ohne Registry fehl.
