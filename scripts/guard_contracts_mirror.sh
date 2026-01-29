@@ -30,6 +30,10 @@ if head_sha:
     print(f"HEAD_SHA={head_sha}")
 PY
   )"
+  event_status=$?
+  if [[ ${event_status} -ne 0 ]]; then
+    event_info=""
+  fi
   if [[ -n "${event_info}" ]]; then
     base_sha="$(echo "${event_info}" | sed -n 's/^BASE_SHA=//p')"
     head_sha="$(echo "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
@@ -57,6 +61,11 @@ if [[ -z "${diff_range}" ]]; then
     base_ref="$(git rev-list --max-parents=0 HEAD | tail -n 1)"
   fi
 
+  if [[ -z "${base_ref}" ]]; then
+    printf '%s\n' "Fehler: base_ref konnte nicht bestimmt werden." >&2
+    exit 1
+  fi
+
   diff_range="${base_ref}...HEAD"
 fi
 
@@ -71,7 +80,7 @@ has_sync_source_line() {
   if [[ -z "${input}" ]]; then
     return 1
   fi
-  echo "${input}" | grep -E '^SYNC_SOURCE:[[:space:]].+$' >/dev/null 2>&1
+  printf '%s\n' "${input}" | grep -E '^SYNC_SOURCE:[[:space:]]+.+$' >/dev/null 2>&1
 }
 
 sync_found=""
@@ -94,7 +103,7 @@ if isinstance(pull_request, dict):
     body = pull_request.get("body") or ""
 match = None
 for line in body.splitlines():
-    if re.match(r"^SYNC_SOURCE:\s+.+$", line):
+    if re.match(r"^SYNC_SOURCE:[ \t]+.+$", line):
         match = line
         break
 if match:
@@ -108,16 +117,16 @@ fi
 
 if [[ -z "${sync_found}" ]]; then
   if [[ -n "${base_sha}" && -n "${head_sha}" ]]; then
-    commit_messages="$(git log --format=%B "${base_sha}..${head_sha}")"
+    commit_range="${base_sha}..${head_sha}"
   else
     merge_base="$(git merge-base "${base_ref}" HEAD 2>/dev/null || true)"
     if [[ -n "${merge_base}" ]]; then
-      commit_messages="$(git log --format=%B "${merge_base}..HEAD")"
+      commit_range="${merge_base}..HEAD"
     else
-      commit_messages="$(git log --format=%B "${base_ref}..HEAD")"
+      commit_range="${base_ref}..HEAD"
     fi
   fi
-  if has_sync_source_line "${commit_messages}"; then
+  if git log --format=%B "${commit_range}" | grep -qE '^SYNC_SOURCE:[[:space:]]+.+$'; then
     sync_found="commit_message"
   fi
 fi
@@ -125,7 +134,7 @@ fi
 if [[ -z "${sync_found}" ]]; then
   for source_file in "contracts/SYNC_SOURCE.txt" ".sync/contracts_source.txt"; do
     if [[ -f "${source_file}" ]]; then
-      if grep -E '^SYNC_SOURCE:[[:space:]].+$' "${source_file}" >/dev/null 2>&1; then
+      if grep -E '^SYNC_SOURCE:[[:space:]]+.+$' "${source_file}" >/dev/null 2>&1; then
         sync_found="file:${source_file}"
         break
       fi
@@ -140,7 +149,7 @@ Füge eine Zeile hinzu: SYNC_SOURCE: <wert>
 Erlaubte Orte: PR-Body, Commit-Message oder contracts/SYNC_SOURCE.txt bzw. .sync/contracts_source.txt
 Beispiel: examples/sample-sync-note.md
 EOF
-  echo "Geänderte Dateien unter contracts/:"
-  echo "${changed_contracts}"
+  printf '%s\n' "Geänderte Dateien unter contracts/:"
+  printf '%s\n' "${changed_contracts}"
   exit 1
 fi

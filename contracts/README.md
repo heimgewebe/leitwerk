@@ -23,7 +23,8 @@ Es ersetzt keine zentrale Contract-Registry.
 
 PRs, die Dateien in `contracts/` ändern, müssen enthalten:
 - eine Sync-Begründung (warum dieser Spiegelstand nötig ist) und
-- eine Referenz auf die metarepo-Quelle (Commit/SHA/Tag oder ein Feld wie `SYNC_SOURCE`).
+- eine Referenz auf die metarepo-Quelle (Commit/SHA/Tag) als Zeile, die exakt mit
+  `SYNC_SOURCE:` beginnt (mindestens ein Whitespace nach dem Doppelpunkt).
 Direkte inhaltliche Contract-Änderungen in diesem Repo sind unerwünscht; nur Spiegelstände.
 Die Sync-Quelle wird im PR-/Commit-Text oder in `contracts/SYNC_SOURCE.txt` bzw.
 `.sync/contracts_source.txt` erwartet.
