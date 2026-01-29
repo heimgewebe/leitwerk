@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:heimgewebe:contracts:fragments:artifact.header.v1",
+  "title": "artifact.header.v1",
+  "type": "object",
+  "description": "Common header fields for artifact envelopes.",
+  "additionalProperties": true,
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^(sha256|sha1|blake3):[a-f0-9]{16,}$"
+    }
+  },
+  "required": ["version", "ts", "task_id", "producer", "digest"]
+}

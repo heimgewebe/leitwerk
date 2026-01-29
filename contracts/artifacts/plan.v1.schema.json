@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:heimgewebe:contracts:artifacts:plan.v1",
+  "title": "plan.v1",
+  "type": "object",
+  "description": "Schema for plan.v1 artifacts.",
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "$ref": "urn:heimgewebe:contracts:fragments:artifact.header.v1"
+    },
+    {
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "plan.v1"
+        }
+      }
+    }
+  ]
+}

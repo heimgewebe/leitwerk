@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:heimgewebe:contracts:artifacts:rationale.v1",
+  "title": "rationale.v1",
+  "type": "object",
+  "description": "Schema for rationale.v1 artifacts.",
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "$ref": "urn:heimgewebe:contracts:fragments:artifact.header.v1"
+    },
+    {
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "rationale.v1"
+        }
+      }
+    }
+  ]
+}

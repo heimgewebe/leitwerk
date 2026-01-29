@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:heimgewebe:contracts:events:leitwerk.events.v1",
+  "title": "leitwerk.events.v1",
+  "type": "object",
+  "description": "Schema for leitwerk event envelopes.",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "leitwerk.events.v1"
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "producer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ext": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["task_id", "producer"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["version", "kind", "id", "ts", "payload"]
+}

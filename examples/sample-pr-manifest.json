@@ -1,0 +1,12 @@
+{
+  "version": "pr.manifest.v1",
+  "ts": "2024-01-01T00:00:00Z",
+  "task_id": "task-001",
+  "producer": "leitwerk",
+  "digest": "sha256:aaaaaaaaaaaaaaaa",
+  "title": "Align artifact schema fields",
+  "repos": ["metarepo", "chronik"],
+  "policy_level": "konservativ",
+  "guards": ["wgx-smoke", "schema-check"],
+  "notes": "Draft manifest for review"
+}

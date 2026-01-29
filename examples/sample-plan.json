@@ -1,0 +1,22 @@
+{
+  "version": "plan.v1",
+  "ts": "2024-01-01T00:00:00Z",
+  "task_id": "task-001",
+  "producer": "leitwerk",
+  "digest": "sha256:aaaaaaaaaaaaaaaa",
+  "goal": "Validierungsschema für Artifact X vereinheitlichen",
+  "steps": [
+    {
+      "id": "scan",
+      "summary": "Schemas in metarepo und chronik erfassen"
+    },
+    {
+      "id": "align",
+      "summary": "Gemeinsame Felder definieren und Abweichungen dokumentieren"
+    },
+    {
+      "id": "update",
+      "summary": "Änderungsvorschläge als Patch bereitstellen"
+    }
+  ]
+}

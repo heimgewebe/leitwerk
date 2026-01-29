@@ -6,6 +6,32 @@
 
 ---
 
+## Scope
+
+leitwerk ist das normative Koordinations- und Durchsetzungsorgan.
+
+**Ist:**
+- Policies, Grenzen, Entscheidungslogik
+- Artefaktdefinitionen und Gate-Logik
+- Referenz für ACS, WGX und Agenten
+
+**Ist nicht:**
+- Runtime-Service
+- Agent
+- Code-Generator
+- Ausführungsinstanz
+
+**Normativ:**
+- `policies/`
+- `interfaces/`
+- `docs/leitwerk.md`
+
+**Begleitend:**
+- `examples/`
+- `notes/`
+
+---
+
 ## Dialektische Grundlegung
 
 Ein autopoetisches Heimgewebe entsteht nicht durch möglichst autonome Agenten,  
