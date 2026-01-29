@@ -1,0 +1,21 @@
+name: Guard contracts mirror
+
+on:
+  pull_request:
+
+jobs:
+  guard-contracts-mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch base branch
+        run: |
+          git fetch --no-tags --prune --depth=1 origin "${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+      - name: Guard contracts mirror
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: scripts/guard_contracts_mirror.sh
