@@ -3,4 +3,4 @@
 - Welche Artefaktfelder sind verbindlich und versioniert?
 - Wie wird Task-Trigger-Logik formalisiert?
 - Welche Guards sind minimal verpflichtend?
-- (in Arbeit: Guard vorhanden) Wie wird contracts/ Spiegelung technisch erzwungen (Guard/Sync)?
+- Guard aktiv: Wie streng soll die Sync-Quelle validiert werden (nur Format vs. metarepo-SHA)?
