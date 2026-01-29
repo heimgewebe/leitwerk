@@ -28,7 +28,7 @@ jedes Organ konsumiert **bestimmte Dateien**, zu **bestimmten Zeitpunkten**, mit
 
 **Sekundär**
 
-* `meta/antipatterns.md` (für UI-Warnungen)
+* Metarepo-Antipattern-Katalog (extern, metarepo)
 * `contracts/*.schema.json` (zur Formvalidierung)
 
 ### Wann?
@@ -65,7 +65,7 @@ Es zeigt Regeln aus leitwerk an.
 **Primär**
 
 * `docs/grenzen.md`
-* `contracts/actions.suggested.v1` (Owner: metarepo)
+* metarepo-kanonischer Contract actions.suggested.v1 (Owner: metarepo; in leitwerk nicht gespiegelt)
 * `contracts/artifacts/uncertainty.report.v1.schema.json`
 
 **Explizit nicht**
@@ -102,7 +102,7 @@ leitwerk definiert:
 
 * `docs/agentik.md`
 * `docs/grenzen.md`
-* `contracts/task.request.v1` (Owner: metarepo)
+* metarepo-kanonischer Contract task.request.v1 (Owner: metarepo; in leitwerk nicht gespiegelt)
 * `contracts/artifacts/uncertainty.report.v1.schema.json`
 
 **Optional (read-only Kontext)**
@@ -174,8 +174,8 @@ leitwerk liefert:
 
 **Sekundär**
 
-* `meta/changelog.md`
-* `meta/antipatterns.md`
+* Metarepo-Changelog (extern, metarepo)
+* Metarepo-Antipattern-Katalog (extern, metarepo)
 
 ### Wann?
 

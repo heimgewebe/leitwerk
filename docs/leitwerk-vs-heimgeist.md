@@ -138,7 +138,7 @@ Leitfragen: Kritisch genug? Ja, weil die zentrale Drift-Gefahr (Rollenverschmelz
   **Korrektur:** Insights ohne Gate sind „Wahrheit ohne Recht“. Das erzeugt Drift.
 
 * **Fehler:** „leitwerk ist doch das Gehirn, also soll es auch semantisch entscheiden.“
-  **Korrektur:** leitwerk entscheidet operativ, nicht ontologisch. Semantik bleibt bei semantAH/heimgeist.
+  **Korrektur:** leitwerk entscheidet operativ, nicht ontologisch. Semantik bleibt bei semantAH (Semantik-/Contract-Observatorium) und heimgeist.
 
 * **Fehler:** „Wenn WGX grün ist, ist alles gut.“
   **Korrektur:** WGX ist Membran, kein Sinn-Orakel. Deshalb existiert heimgeist.
