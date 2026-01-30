@@ -124,7 +124,7 @@ if [[ -z "${sync_found}" ]]; then
       commit_range="${base_ref}..HEAD"
     fi
   fi
-  if git log --extended-regexp --grep='^SYNC_SOURCE:[[:space:]]+.+$' --format=%H "${commit_range}" | grep -q .; then
+  if git log --grep='^SYNC_SOURCE:[[:space:]][[:space:]]*[^[:space:]].*$' --format=%H "${commit_range}" | grep -q .; then
     sync_found="commit_message"
   fi
 fi
