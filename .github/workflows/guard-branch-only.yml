@@ -18,7 +18,7 @@ jobs:
 
           # Check if HEAD_REF is available (rare edge case)
           if [[ -z "${HEAD_REF:-}" ]]; then
-             echo "::error::Blocked: HEAD_REF not available for this event context. Ensure the event provides 'github.head_ref'."
+             echo "::error::Blocked: HEAD_REF not available (base=${BASE_REF}, allowed=${ALLOWED_BASE_REF}). Event may not provide github.head_ref."
              exit 1
           fi
 
