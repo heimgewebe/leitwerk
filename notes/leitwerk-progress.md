@@ -8,14 +8,15 @@
 ## Abgeleitete Phase-1-Anforderungen (Arbeitsannahmen, noch zu ratifizieren)
 - [ ] Branch-only-Workflow erzwingen (Policy/CI, z. B. Branch-Protection; kein Direkt-Write auf Hauptzweige).
 - [ ] WGX-Guards als Pflicht-Gate für PRs und alle ACS-triggered Runs (CI + optional lokal).
-- [ ] Agenten liefern mindestens: Plan, Patch, Begründung, Unsicherheiten (Contract/Owner noch festzulegen).
+- [x] Agenten liefern mindestens: Plan, Patch, Begründung, Unsicherheiten (Schemas in `contracts/artifacts` angelegt).
 - [ ] Artefaktstatus + Guard-Feedback an ACS zurückmelden.
-- [ ] Unsicherheit persistieren (als Artefakt; Schema folgt).
+- [x] Unsicherheit persistieren (als Artefakt; Schema definiert).
 
 ## Erledigt
 - [x] Phase-1-Checkliste konkretisiert. (Siehe: `notes/phase-1-checklist.md`)
+- [x] Artefakt-Schemas formalisiert (JSON-Schema für `plan.v1`, `patch.v1` etc. in `contracts/artifacts` als Proposal).
 
 ## Nächster Schritt
-- [ ] Artefakt-Schemas formalisieren (JSON-Schema für `plan.v1`, `patch.v1` etc. im metarepo).
+- [ ] Branch-only-Workflow erzwingen (Policy/CI).
 
 Notizstatus: nicht normativ (Arbeitsstand).

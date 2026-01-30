@@ -14,8 +14,72 @@
         "version": {
           "type": "string",
           "const": "context.bundle.v1"
+        },
+        "data": {
+          "type": "object",
+          "description": "Payload data for the context bundle.",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "The task prompt given to the agent."
+            },
+            "files": {
+              "type": "array",
+              "description": "List of relevant files for context.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": ["embed", "ref"],
+                    "description": "How the file content is provided."
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "size": {
+                    "type": "integer"
+                  },
+                  "mime": {
+                    "type": "string"
+                  },
+                  "redacted": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["path", "mode"],
+                "if": {
+                  "properties": { "mode": { "const": "embed" } }
+                },
+                "then": {
+                  "required": ["content"]
+                }
+              }
+            },
+            "contracts": {
+              "type": "array",
+              "description": "List of relevant contract IDs or paths.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "prompt",
+            "files"
+          ]
         }
-      }
+      },
+      "required": [
+        "data"
+      ]
     }
   ]
 }

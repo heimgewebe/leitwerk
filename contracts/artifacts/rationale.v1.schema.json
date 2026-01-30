@@ -14,8 +14,24 @@
         "version": {
           "type": "string",
           "const": "rationale.v1"
+        },
+        "data": {
+          "type": "object",
+          "description": "Payload data for the rationale.",
+          "properties": {
+            "explanation": {
+              "type": "string",
+              "description": "Explanation for the plan and patch."
+            }
+          },
+          "required": [
+            "explanation"
+          ]
         }
-      }
+      },
+      "required": [
+        "data"
+      ]
     }
   ]
 }

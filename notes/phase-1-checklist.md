@@ -10,6 +10,7 @@ Diese Artefakte sollten physisch (als Datei oder Objekt) existieren; Blockier-Po
 - [ ] **`context.bundle.v1`**
     - Inhalt: Relevante Files, Pfade, Contracts, User-Prompt.
     - Zweck: Input für den Agenten, Reproduzierbarkeit.
+    - Semantik: `files[].mode="embed"` (Inhalt enthalten) vs `mode="ref"` (Referenz + Metadaten).
 - [ ] **`plan.v1`**
     - Inhalt: Sequenz von Schritten, die der Agent plant.
 - [ ] **`patch.v1`**
@@ -54,7 +55,8 @@ Vorgeschlagene Gates; konkrete Blockier-Policy wird nach Ratifizierung implement
     - `rationale`: Text
     - `uncertainty`:
         - `score`: Float
-        - `reasons`: Liste von Strings
+        - `reasons`: Liste von Strings (Kurzform)
+        - `risks`: Liste von Objekten (Strukturierte Form; alternativ zu reasons)
 
 ### WGX (Input/Output)
 - **Input:**

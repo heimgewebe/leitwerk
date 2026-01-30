@@ -14,8 +14,24 @@
         "version": {
           "type": "string",
           "const": "patch.v1"
+        },
+        "data": {
+          "type": "object",
+          "description": "Payload data for the patch.",
+          "properties": {
+            "diff": {
+              "type": "string",
+              "description": "The git diff content."
+            }
+          },
+          "required": [
+            "diff"
+          ]
         }
-      }
+      },
+      "required": [
+        "data"
+      ]
     }
   ]
 }

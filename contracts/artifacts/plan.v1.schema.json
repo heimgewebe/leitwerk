@@ -14,8 +14,47 @@
         "version": {
           "type": "string",
           "const": "plan.v1"
+        },
+        "data": {
+          "type": "object",
+          "description": "Payload data for the plan.",
+          "properties": {
+            "steps": {
+              "type": "array",
+              "description": "Sequence of steps planned by the agent.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique identifier for the step."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the step."
+                  },
+                  "files": {
+                    "type": "array",
+                    "description": "List of files touched by this step.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "description"
+                ]
+              }
+            }
+          },
+          "required": [
+            "steps"
+          ]
         }
-      }
+      },
+      "required": [
+        "data"
+      ]
     }
   ]
 }
