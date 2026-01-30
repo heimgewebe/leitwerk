@@ -2,9 +2,10 @@
 
 Basierend auf `docs/leitwerk.md`, `policies/` und `interfaces/`.
 
-## 1. Erforderliche Artefakte (Minimum)
+## 1. Erforderliche Artefakte (Arbeitsminimum - Vorschlag)
 
-Diese Artefakte müssen physisch (als Datei oder Objekt) existieren, bevor eine Ausführung stattfinden darf.
+Artefakt-IDs sind **Vorschläge**; Owner+Schemas liegen im metarepo.
+Diese Artefakte sollten physisch (als Datei oder Objekt) existieren; Blockier-Policy folgt nach Ratifizierung.
 
 - [ ] **`context.bundle.v1`**
     - Inhalt: Relevante Files, Pfade, Contracts, User-Prompt.
@@ -21,13 +22,13 @@ Diese Artefakte müssen physisch (als Datei oder Objekt) existieren, bevor eine 
 
 ## 2. Gate-Prüfungen (Logik)
 
-Diese Prüfungen müssen `TRUE` ergeben, sonst Abbruch.
+Vorgeschlagene Gates; konkrete Blockier-Policy wird nach Ratifizierung implementiert.
 
 - [ ] **Git-Pre-Flight**
     - `git apply --check` läuft erfolgreich durch.
     - Target-Branch ist NICHT `main` / `master` / protected.
 - [ ] **Invarianz-Check**
-    - Patch enthält keine Änderungen an `policies/` oder `leitwerk` selbst (außer via Meta-Prozess).
+    - Patch enthält keine Änderungen an `policies/` oder `leitwerk` selbst (Default-Regel; Ausnahme via Meta-Prozess z.B. `policy.decision` + dedizierter PR-Typ).
 - [ ] **WGX-Guard**
     - Alle definierten WGX-Policies für den Scope sind erfüllt.
 - [ ] **Unsicherheits-Schwelle**
