@@ -10,11 +10,12 @@ jobs:
     steps:
       - name: Enforce branch-only PRs
         env:
-          ALLOWED_BASE_REF: main
+          ALLOWED_BASE_REF: ${{ vars.ALLOWED_BASE_REF }}
           BASE_REF: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
         run: |
           set -euo pipefail
+          ALLOWED_BASE_REF="${ALLOWED_BASE_REF:-main}"
 
           # Check if HEAD_REF is available (rare edge case)
           if [[ -z "${HEAD_REF:-}" ]]; then

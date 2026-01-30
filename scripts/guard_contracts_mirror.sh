@@ -141,12 +141,10 @@ if [[ -z "${sync_found}" ]]; then
 fi
 
 if [[ -z "${sync_found}" ]]; then
-  cat <<'EOF'
-contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle.
-Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)
-Erlaubte Orte: PR-Body, Commit-Message oder contracts/SYNC_SOURCE.txt oder .sync/contracts_source.txt
-Beispiel: examples/sample-sync-note.md
-EOF
+  echo "::error::contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle."
+  echo "::error::Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)"
+  echo "::error::Erlaubte Orte: PR-Body, Commit-Message oder contracts/SYNC_SOURCE.txt oder .sync/contracts_source.txt"
+  echo "::error::Beispiel: examples/sample-sync-note.md"
   printf '%s\n' "Geänderte Dateien unter contracts/:"
   printf '%s\n' "${changed_contracts}"
   exit 1
