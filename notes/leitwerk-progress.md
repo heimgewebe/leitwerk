@@ -12,7 +12,10 @@
 - [ ] Artefaktstatus + Guard-Feedback an ACS zurückmelden.
 - [ ] Unsicherheit persistieren (als Artefakt; Schema folgt).
 
+## Erledigt
+- [x] Phase-1-Checkliste konkretisiert. (Siehe: `notes/phase-1-checklist.md`)
+
 ## Nächster Schritt
-- [ ] Phase-1-Checkliste konkretisieren: Welche Artefakte, welche Gate-Prüfungen, welche Mindestfelder pro Interface.
+- [ ] Artefakt-Schemas formalisieren (JSON-Schema für `plan.v1`, `patch.v1` etc. im metarepo).
 
 Notizstatus: nicht normativ (Arbeitsstand).
