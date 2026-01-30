@@ -25,30 +25,64 @@
               "maximum": 1,
               "description": "Uncertainty score between 0.0 and 1.0."
             },
+            "reasons": {
+              "type": "array",
+              "description": "List of simple string reasons (Phase 1).",
+              "items": {
+                "type": "string"
+              }
+            },
             "risks": {
               "type": "array",
-              "description": "List of identified risks.",
+              "description": "List of structured risks (Phase 2).",
               "items": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Optional ID for the risk."
+                  },
                   "risk": {
                     "type": "string",
-                    "description": "Description of the risk."
+                    "description": "Description of the risk (legacy field)."
+                  },
+                  "reason": {
+                    "type": "string",
+                    "description": "Description of the risk/reason."
                   },
                   "severity": {
                     "type": "string",
-                    "enum": ["low", "medium", "high"]
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ]
                   },
                   "mitigation": {
                     "type": "string"
                   }
                 },
-                "required": ["risk"]
+                "anyOf": [
+                  { "required": ["risk"] },
+                  { "required": ["reason"] }
+                ]
               }
             }
           },
           "required": [
             "score"
+          ],
+          "anyOf": [
+            {
+              "required": [
+                "reasons"
+              ]
+            },
+            {
+              "required": [
+                "risks"
+              ]
+            }
           ]
         }
       },

@@ -32,13 +32,35 @@
                   "path": {
                     "type": "string"
                   },
+                  "mode": {
+                    "type": "string",
+                    "enum": ["embed", "ref"],
+                    "description": "How the file content is provided."
+                  },
                   "content": {
                     "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "size": {
+                    "type": "integer"
+                  },
+                  "mime": {
+                    "type": "string"
+                  },
+                  "redacted": {
+                    "type": "boolean"
                   }
                 },
-                "required": [
-                  "path"
-                ]
+                "required": ["path", "mode"],
+                "if": {
+                  "properties": { "mode": { "const": "embed" } }
+                },
+                "then": {
+                  "required": ["content"]
+                }
               }
             },
             "contracts": {
