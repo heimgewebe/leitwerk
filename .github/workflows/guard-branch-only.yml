@@ -1,0 +1,28 @@
+name: Guard branch-only workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  guard-branch-only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce branch-only PRs
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          if [[ "${BASE_REF}" != "main" ]]; then
+            echo "Blocked: base branch must be main (got: ${BASE_REF})."
+            exit 1
+          fi
+
+          if [[ "${HEAD_REF}" == "main" ]]; then
+            echo "Blocked: PRs must come from a feature branch, not from main."
+            exit 1
+          fi
+
+          echo "OK: branch-only policy satisfied (head=${HEAD_REF} -> base=${BASE_REF})."
