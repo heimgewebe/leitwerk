@@ -14,8 +14,47 @@
         "version": {
           "type": "string",
           "const": "uncertainty.report.v1"
+        },
+        "data": {
+          "type": "object",
+          "description": "Payload data for the uncertainty report.",
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Uncertainty score between 0.0 and 1.0."
+            },
+            "risks": {
+              "type": "array",
+              "description": "List of identified risks.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "risk": {
+                    "type": "string",
+                    "description": "Description of the risk."
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high"]
+                  },
+                  "mitigation": {
+                    "type": "string"
+                  }
+                },
+                "required": ["risk"]
+              }
+            }
+          },
+          "required": [
+            "score"
+          ]
         }
-      }
+      },
+      "required": [
+        "data"
+      ]
     }
   ]
 }
