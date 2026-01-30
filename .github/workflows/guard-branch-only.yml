@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Enforce branch-only PRs
         env:
-          ALLOWED_BASE_REF: main
+          ALLOWED_BASE_REF: ${{ vars.ALLOWED_BASE_REF || 'main' }}
           BASE_REF: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
         run: |
