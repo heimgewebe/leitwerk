@@ -10,18 +10,25 @@ jobs:
     steps:
       - name: Enforce branch-only PRs
         env:
+          ALLOWED_BASE_REF: main
           BASE_REF: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
         run: |
           set -euo pipefail
 
-          if [[ "${BASE_REF}" != "main" ]]; then
-            echo "Blocked: base branch must be main (got: ${BASE_REF})."
+          # Check if HEAD_REF is available (rare edge case)
+          if [[ -z "${HEAD_REF:-}" ]]; then
+             echo "::error::Blocked: HEAD_REF not available for this event context."
+             exit 1
+          fi
+
+          if [[ "${BASE_REF}" != "${ALLOWED_BASE_REF}" ]]; then
+            echo "::error::Blocked: base branch must be ${ALLOWED_BASE_REF} (got: ${BASE_REF})."
             exit 1
           fi
 
-          if [[ "${HEAD_REF}" == "main" ]]; then
-            echo "Blocked: PRs must come from a feature branch, not from main."
+          if [[ "${HEAD_REF}" == "${ALLOWED_BASE_REF}" ]]; then
+            echo "::error::Blocked: PRs must come from a feature branch, not from ${ALLOWED_BASE_REF}."
             exit 1
           fi
 
