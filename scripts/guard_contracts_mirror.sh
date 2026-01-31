@@ -77,7 +77,7 @@ has_sync_source_line() {
   if [[ -z "${input}" ]]; then
     return 1
   fi
-  printf '%s\n' "${input}" | grep -E '^SYNC_SOURCE:[[:space:]]+.+$' >/dev/null 2>&1
+  printf '%s\n' "${input}" | grep -E '^SYNC_SOURCE:[[:space:]]+.*[^[:space:]].*$' >/dev/null 2>&1
 }
 
 sync_found=""
@@ -99,7 +99,7 @@ try:
         body = pull_request.get("body") or ""
     match = None
     for line in body.splitlines():
-        if re.match(r"^SYNC_SOURCE:[ \t]+.+$", line):
+        if re.match(r"^SYNC_SOURCE:[ \t]+.*\S.*$", line):
             match = line
             break
     if match:
@@ -134,7 +134,7 @@ fi
 if [[ -z "${sync_found}" ]]; then
   for source_file in "contracts/SYNC_SOURCE.txt" ".sync/contracts_source.txt"; do
     if [[ -f "${source_file}" ]]; then
-      if grep -E '^SYNC_SOURCE:[[:space:]]+.+$' "${source_file}" >/dev/null 2>&1; then
+      if grep -E '^SYNC_SOURCE:[[:space:]]+.*[^[:space:]].*$' "${source_file}" >/dev/null 2>&1; then
         sync_found="file:${source_file}"
         break
       fi
