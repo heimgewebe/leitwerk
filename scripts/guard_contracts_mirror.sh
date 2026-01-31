@@ -124,7 +124,9 @@ if [[ -z "${sync_found}" ]]; then
       commit_range="${base_ref}..HEAD"
     fi
   fi
-  if git log --format=%B "${commit_range}" | grep -qE '^SYNC_SOURCE:[[:space:]]+.+$'; then
+  # Search commit messages using a portable Basic Regular Expression (BRE).
+  # Matches: SYNC_SOURCE: followed by at least one space and one non-space character.
+  if [[ -n "$(git log --max-count=1 --grep='^SYNC_SOURCE:[[:space:]][[:space:]]*[^[:space:]].*$' --format=%H "${commit_range}")" ]]; then
     sync_found="commit_message"
   fi
 fi
