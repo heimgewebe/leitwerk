@@ -49,6 +49,7 @@ PY
     base_sha="$(printf '%s\n' "${event_info}" | sed -n 's/^BASE_SHA=//p')"
     head_sha="$(printf '%s\n' "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
     pr_sync_match="$(printf '%s\n' "${event_info}" | sed -n 's/^SYNC_SOURCE_MATCH=//p')"
+    pr_sync_match="${pr_sync_match%$'\r'}"
   fi
 fi
 
