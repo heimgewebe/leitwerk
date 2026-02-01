@@ -66,7 +66,7 @@ if [[ -z "${diff_range}" ]]; then
   diff_range="${base_ref}...HEAD"
 fi
 
-changed_contracts="$(git diff --name-only "${diff_range}" | grep '^contracts/' || true)"
+changed_contracts="$(git diff --name-only "${diff_range}" -- contracts/ || true)"
 
 if [[ -z "${changed_contracts}" ]]; then
   exit 0
