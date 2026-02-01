@@ -46,9 +46,9 @@ except (OSError, json.JSONDecodeError, KeyError):
 PY
   )" || event_info=""
   if [[ -n "${event_info}" ]]; then
-    base_sha="$(echo "${event_info}" | sed -n 's/^BASE_SHA=//p')"
-    head_sha="$(echo "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
-    pr_sync_match="$(echo "${event_info}" | sed -n 's/^SYNC_SOURCE_MATCH=//p')"
+    base_sha="$(printf '%s\n' "${event_info}" | sed -n 's/^BASE_SHA=//p')"
+    head_sha="$(printf '%s\n' "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
+    pr_sync_match="$(printf '%s\n' "${event_info}" | sed -n 's/^SYNC_SOURCE_MATCH=//p')"
   fi
 fi
 
