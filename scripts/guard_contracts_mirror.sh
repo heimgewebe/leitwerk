@@ -10,30 +10,46 @@ base_ref="${BASE_REF:-${GITHUB_BASE_REF:-}}"
 base_sha=""
 head_sha=""
 
+pr_sync_match=""
 if [[ -n "${GITHUB_EVENT_PATH:-}" && -f "${GITHUB_EVENT_PATH}" ]]; then
   event_info="$(
     "${PYTHON_BIN}" - <<'PY'
 import json
 import os
+import re
 
 event_path = os.environ["GITHUB_EVENT_PATH"]
 try:
     with open(event_path, "r", encoding="utf-8") as handle:
         payload = json.load(handle)
-    pull_request = payload.get("pull_request") or {}
+    pull_request = payload.get("pull_request")
+    if not isinstance(pull_request, dict):
+        pull_request = {}
+
     base_sha = pull_request.get("base", {}).get("sha") or ""
     head_sha = pull_request.get("head", {}).get("sha") or ""
     if base_sha:
         print(f"BASE_SHA={base_sha}")
     if head_sha:
         print(f"HEAD_SHA={head_sha}")
+
+    body = pull_request.get("body") or ""
+    match = None
+    for line in body.splitlines():
+        if re.match(r"^SYNC_SOURCE:[ \t]+\S.*$", line):
+            match = line
+            break
+    if match:
+        print(f"SYNC_SOURCE_MATCH={match}")
 except (OSError, json.JSONDecodeError, KeyError):
     raise SystemExit(0)
 PY
   )" || event_info=""
   if [[ -n "${event_info}" ]]; then
-    base_sha="$(echo "${event_info}" | sed -n 's/^BASE_SHA=//p')"
-    head_sha="$(echo "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
+    base_sha="$(printf '%s\n' "${event_info}" | sed -n 's/^BASE_SHA=//p')"
+    head_sha="$(printf '%s\n' "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
+    pr_sync_match="$(printf '%s\n' "${event_info}" | sed -n 's/^SYNC_SOURCE_MATCH=//p')"
+    pr_sync_match="${pr_sync_match%$'\r'}"
   fi
 fi
 
@@ -82,33 +98,8 @@ has_sync_source_line() {
 
 sync_found=""
 
-if [[ -n "${GITHUB_EVENT_PATH:-}" && -f "${GITHUB_EVENT_PATH}" ]]; then
-  pr_body="$(
-    "${PYTHON_BIN}" - <<'PY'
-import json
-import os
-import re
-
-event_path = os.environ["GITHUB_EVENT_PATH"]
-try:
-    with open(event_path, "r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-    body = ""
-    pull_request = payload.get("pull_request")
-    if isinstance(pull_request, dict):
-        body = pull_request.get("body") or ""
-    match = None
-    for line in body.splitlines():
-        if re.match(r"^SYNC_SOURCE:[ \t]+\S.*$", line):
-            match = line
-            break
-    if match:
-        print(match)
-except (OSError, json.JSONDecodeError, KeyError):
-    raise SystemExit(0)
-PY
-  )"
-  if has_sync_source_line "${pr_body}"; then
+if [[ -n "${pr_sync_match}" ]]; then
+  if has_sync_source_line "${pr_sync_match}"; then
     sync_found="pr_body"
   fi
 fi
