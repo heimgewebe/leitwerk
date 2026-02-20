@@ -90,11 +90,10 @@ if [[ -z "${changed_contracts}" ]]; then
 fi
 
 has_sync_source_line() {
-  local input="${1}"
-  if [[ -z "${input}" ]]; then
-    return 1
-  fi
-  printf '%s\n' "${input}" | grep -E '^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$' >/dev/null 2>&1
+  # Use native Bash regex to avoid the overhead of spawning a grep process.
+  local -r input="${1-}"
+  local -r regex='^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$'
+  [[ "${input}" =~ ${regex} ]]
 }
 
 sync_found=""
