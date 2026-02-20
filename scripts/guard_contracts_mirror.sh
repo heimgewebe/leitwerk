@@ -91,10 +91,12 @@ fi
 
 has_sync_source_line() {
   local input="${1}"
-  if [[ -z "${input}" ]]; then
+  local regex='^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$'
+  if [[ "${input}" =~ ${regex} ]]; then
+    return 0
+  else
     return 1
   fi
-  printf '%s\n' "${input}" | grep -E '^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$' >/dev/null 2>&1
 }
 
 sync_found=""
