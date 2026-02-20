@@ -90,13 +90,9 @@ if [[ -z "${changed_contracts}" ]]; then
 fi
 
 has_sync_source_line() {
-  local input="${1}"
-  local regex='^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$'
-  if [[ "${input}" =~ ${regex} ]]; then
-    return 0
-  else
-    return 1
-  fi
+  local -r input="${1}"
+  local -r regex='^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$'
+  [[ "${input}" =~ ${regex} ]]
 }
 
 sync_found=""
