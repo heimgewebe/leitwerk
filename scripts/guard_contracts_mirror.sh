@@ -83,7 +83,11 @@ if [[ -z "${diff_range}" ]]; then
 fi
 
 # Use pathspec to filter contracts/ changes without grep.
-changed_contracts="$(git diff --name-only "${diff_range}" -- contracts/ || true)"
+if ! changed_contracts="$(git diff --name-only "${diff_range}" -- contracts/)"; then
+  current_head="$(git rev-parse --verify HEAD 2>/dev/null || printf '%s' "unknown")"
+  printf '%s\n' "WARN contracts_guard_skip git_diff_failed diff_range=${diff_range} head=${current_head}" >&2
+  changed_contracts=""
+fi
 
 if [[ -z "${changed_contracts}" ]]; then
   exit 0
