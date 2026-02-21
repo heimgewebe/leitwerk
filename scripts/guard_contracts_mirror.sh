@@ -84,7 +84,8 @@ fi
 
 # Use pathspec to filter contracts/ changes without grep.
 if ! changed_contracts="$(git diff --name-only "${diff_range}" -- contracts/)"; then
-  printf '%s\n' "Warnung: git diff schlug fehl; überspringe contracts/ Guard (diff_range=${diff_range})." >&2
+  current_head="$(git rev-parse HEAD 2>/dev/null || echo "unknown")"
+  printf '%s\n' "Warnung: git diff schlug fehl; überspringe contracts/ Guard (diff_range=${diff_range}, HEAD=${current_head})." >&2
   changed_contracts=""
 fi
 
