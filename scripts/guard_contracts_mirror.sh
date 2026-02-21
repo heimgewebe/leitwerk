@@ -6,7 +6,7 @@ if ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
   PYTHON_BIN="python"
 fi
 
-SYNC_SOURCE_FILES=(
+declare -ar SYNC_SOURCE_FILES=(
   "contracts/SYNC_SOURCE.txt"
   ".sync/contracts_source.txt"
 )
@@ -103,7 +103,7 @@ has_sync_source_line() {
 }
 
 report_error_and_exit() {
-  local changed_files="${1}"
+  local changed_files="${1-}"
   echo "::error::contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle."
   echo "::error::Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)"
 
