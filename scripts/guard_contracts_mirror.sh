@@ -6,6 +6,11 @@ if ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
   PYTHON_BIN="python"
 fi
 
+SYNC_SOURCE_FILES=(
+  "contracts/SYNC_SOURCE.txt"
+  ".sync/contracts_source.txt"
+)
+
 base_ref="${BASE_REF:-${GITHUB_BASE_REF:-}}"
 base_sha=""
 head_sha=""
@@ -124,7 +129,7 @@ if [[ -z "${sync_found}" ]]; then
 fi
 
 if [[ -z "${sync_found}" ]]; then
-  for source_file in "contracts/SYNC_SOURCE.txt" ".sync/contracts_source.txt"; do
+  for source_file in "${SYNC_SOURCE_FILES[@]}"; do
     if [[ -f "${source_file}" ]]; then
       if grep -E '^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$' "${source_file}" >/dev/null 2>&1; then
         sync_found="file:${source_file}"
@@ -137,7 +142,8 @@ fi
 if [[ -z "${sync_found}" ]]; then
   echo "::error::contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle."
   echo "::error::Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)"
-  echo "::error::Erlaubte Orte: PR-Body, Commit-Message oder contracts/SYNC_SOURCE.txt oder .sync/contracts_source.txt"
+  joined_files=$(printf " oder %s" "${SYNC_SOURCE_FILES[@]}")
+  echo "::error::Erlaubte Orte: PR-Body, Commit-Message${joined_files}"
   echo "::error::Beispiel: examples/sample-sync-note.md"
   printf '%s\n' "Geänderte Dateien unter contracts/:"
   printf '%s\n' "${changed_contracts}"
