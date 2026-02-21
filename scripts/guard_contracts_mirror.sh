@@ -6,6 +6,11 @@ if ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
   PYTHON_BIN="python"
 fi
 
+declare -ar SYNC_SOURCE_FILES=(
+  "contracts/SYNC_SOURCE.txt"
+  ".sync/contracts_source.txt"
+)
+
 base_ref="${BASE_REF:-${GITHUB_BASE_REF:-}}"
 base_sha=""
 head_sha=""
@@ -100,6 +105,24 @@ has_sync_source_line() {
   [[ "${input}" =~ ${regex} ]]
 }
 
+report_error_and_exit() {
+  local changed_files="${1-}"
+  echo "::error::contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle."
+  echo "::error::Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)"
+
+  local allowed_locations="PR-Body, Commit-Message"
+  local f
+  for f in "${SYNC_SOURCE_FILES[@]}"; do
+    allowed_locations="${allowed_locations}, ${f}"
+  done
+
+  echo "::error::Erlaubte Orte: ${allowed_locations}"
+  echo "::error::Beispiel: examples/sample-sync-note.md"
+  printf '%s\n' "Geänderte Dateien unter contracts/:"
+  printf '%s\n' "${changed_files}"
+  exit 1
+}
+
 sync_found=""
 
 if [[ -n "${pr_sync_match}" ]]; then
@@ -127,7 +150,7 @@ if [[ -z "${sync_found}" ]]; then
 fi
 
 if [[ -z "${sync_found}" ]]; then
-  for source_file in "contracts/SYNC_SOURCE.txt" ".sync/contracts_source.txt"; do
+  for source_file in "${SYNC_SOURCE_FILES[@]}"; do
     if [[ -f "${source_file}" ]]; then
       if grep -E '^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$' "${source_file}" >/dev/null 2>&1; then
         sync_found="file:${source_file}"
@@ -138,11 +161,5 @@ if [[ -z "${sync_found}" ]]; then
 fi
 
 if [[ -z "${sync_found}" ]]; then
-  echo "::error::contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle."
-  echo "::error::Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)"
-  echo "::error::Erlaubte Orte: PR-Body, Commit-Message oder contracts/SYNC_SOURCE.txt oder .sync/contracts_source.txt"
-  echo "::error::Beispiel: examples/sample-sync-note.md"
-  printf '%s\n' "Geänderte Dateien unter contracts/:"
-  printf '%s\n' "${changed_contracts}"
-  exit 1
+  report_error_and_exit "${changed_contracts}"
 fi
