@@ -102,6 +102,24 @@ has_sync_source_line() {
   printf '%s\n' "${input}" | grep -E '^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$' >/dev/null 2>&1
 }
 
+report_error_and_exit() {
+  local changed_files="${1}"
+  echo "::error::contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle."
+  echo "::error::Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)"
+
+  local allowed_locations="PR-Body, Commit-Message"
+  local f
+  for f in "${SYNC_SOURCE_FILES[@]}"; do
+    allowed_locations="${allowed_locations}, ${f}"
+  done
+
+  echo "::error::Erlaubte Orte: ${allowed_locations}"
+  echo "::error::Beispiel: examples/sample-sync-note.md"
+  printf '%s\n' "Geänderte Dateien unter contracts/:"
+  printf '%s\n' "${changed_files}"
+  exit 1
+}
+
 sync_found=""
 
 if [[ -n "${pr_sync_match}" ]]; then
@@ -140,12 +158,5 @@ if [[ -z "${sync_found}" ]]; then
 fi
 
 if [[ -z "${sync_found}" ]]; then
-  echo "::error::contracts/ ist ein read-only Spiegel. Änderungen benötigen eine Sync-Quelle."
-  echo "::error::Füge eine Zeile hinzu: SYNC_SOURCE: <wert> (mindestens ein Leerzeichen nach dem Doppelpunkt)"
-  joined_files=$(printf " oder %s" "${SYNC_SOURCE_FILES[@]}")
-  echo "::error::Erlaubte Orte: PR-Body, Commit-Message${joined_files}"
-  echo "::error::Beispiel: examples/sample-sync-note.md"
-  printf '%s\n' "Geänderte Dateien unter contracts/:"
-  printf '%s\n' "${changed_contracts}"
-  exit 1
+  report_error_and_exit "${changed_contracts}"
 fi
