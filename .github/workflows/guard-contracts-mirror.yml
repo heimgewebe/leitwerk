@@ -13,8 +13,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Fetch base branch
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          git fetch --no-tags --prune origin "${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+          git fetch --no-tags --prune origin "${BASE_REF}:refs/remotes/origin/${BASE_REF}"
       - name: Guard contracts mirror
         env:
           BASE_REF: ${{ github.base_ref }}
