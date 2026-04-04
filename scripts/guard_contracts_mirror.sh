@@ -6,6 +6,9 @@ declare -ar SYNC_SOURCE_FILES=(
   ".sync/contracts_source.txt"
 )
 
+# Helper function to validate SYNC_SOURCE syntax.
+# While currently not used directly in the main PR-body logic (which extracts the value via Python),
+# it serves as a tested, normative reference for the expected format and is available for other contexts.
 has_sync_source_line() {
   # Use native Bash regex to avoid the overhead of spawning a grep process.
   local -r input="${1-}"
@@ -73,7 +76,7 @@ try:
     if len(matches) == 1:
         value = matches[0].strip()
         print(f"SYNC_SOURCE_VALUE={value}")
-        # Backward compatibility: output a normalized legacy string, not the raw match.
+        # SYNC_SOURCE_MATCH contains a normalized legacy string reconstruction for backward compatibility, not the raw matched line.
         print(f"SYNC_SOURCE_MATCH=SYNC_SOURCE: {value}")
     elif len(matches) > 1:
         print("SYNC_SOURCE_ERROR=multiple_matches")
