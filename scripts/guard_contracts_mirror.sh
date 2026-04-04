@@ -123,43 +123,35 @@ report_error_and_exit() {
   exit 1
 }
 
-sync_found=""
-
 if [[ -n "${pr_sync_match}" ]]; then
   if has_sync_source_line "${pr_sync_match}"; then
-    sync_found="pr_body"
+    exit 0
   fi
 fi
 
-if [[ -z "${sync_found}" ]]; then
-  if [[ -n "${base_sha}" && -n "${head_sha}" ]]; then
-    commit_range="${base_sha}..${head_sha}"
+if [[ -n "${base_sha}" && -n "${head_sha}" ]]; then
+  commit_range="${base_sha}..${head_sha}"
+else
+  merge_base="$(git merge-base "${base_ref}" HEAD 2>/dev/null || true)"
+  if [[ -n "${merge_base}" ]]; then
+    commit_range="${merge_base}..HEAD"
   else
-    merge_base="$(git merge-base "${base_ref}" HEAD 2>/dev/null || true)"
-    if [[ -n "${merge_base}" ]]; then
-      commit_range="${merge_base}..HEAD"
-    else
-      commit_range="${base_ref}..HEAD"
-    fi
-  fi
-  # Search commit messages using a portable Basic Regular Expression (BRE).
-  # Matches: SYNC_SOURCE: followed by at least one space and one non-space character.
-  if [[ -n "$(git log --max-count=1 --grep='^SYNC_SOURCE:[[:space:]][[:space:]]*[^[:space:]].*$' --format=%H "${commit_range}")" ]]; then
-    sync_found="commit_message"
+    commit_range="${base_ref}..HEAD"
   fi
 fi
 
-if [[ -z "${sync_found}" ]]; then
-  for source_file in "${SYNC_SOURCE_FILES[@]}"; do
-    if [[ -f "${source_file}" ]]; then
-      if grep -E '^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$' "${source_file}" >/dev/null 2>&1; then
-        sync_found="file:${source_file}"
-        break
-      fi
-    fi
-  done
+# Search commit messages using a portable Basic Regular Expression (BRE).
+# Matches: SYNC_SOURCE: followed by at least one space and one non-space character.
+if [[ -n "$(git log --max-count=1 --grep='^SYNC_SOURCE:[[:space:]][[:space:]]*[^[:space:]].*$' --format=%H "${commit_range}")" ]]; then
+  exit 0
 fi
 
-if [[ -z "${sync_found}" ]]; then
-  report_error_and_exit "${changed_contracts}"
-fi
+for source_file in "${SYNC_SOURCE_FILES[@]}"; do
+  if [[ -f "${source_file}" ]]; then
+    if grep -E '^SYNC_SOURCE:[[:space:]]+[^[:space:]].*$' "${source_file}" >/dev/null 2>&1; then
+      exit 0
+    fi
+  fi
+done
+
+report_error_and_exit "${changed_contracts}"
