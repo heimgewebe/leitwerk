@@ -47,7 +47,7 @@ try:
     if len(matches) == 1:
         value = matches[0].strip()
         print(f"SYNC_SOURCE_VALUE={value}")
-        # Backward compatibility: print the full matched line.
+        # Backward compatibility: output a normalized legacy string, not the raw match.
         print(f"SYNC_SOURCE_MATCH=SYNC_SOURCE: {value}")
     elif len(matches) > 1:
         print("SYNC_SOURCE_ERROR=multiple_matches")
@@ -137,9 +137,6 @@ report_error_and_exit() {
 
 sync_found=""
 
-if [[ -n "${pr_sync_match}" ]]; then
-  : # Compatibility
-fi
 if [[ -n "${pr_sync_value}" ]]; then
   sync_found="pr_body"
 fi
