@@ -16,6 +16,8 @@ base_sha=""
 head_sha=""
 
 pr_sync_match=""
+pr_sync_value=""
+pr_sync_error=""
 if [[ -n "${GITHUB_EVENT_PATH:-}" && -f "${GITHUB_EVENT_PATH}" ]]; then
   event_info="$(
     "${PYTHON_BIN}" - <<'PY'
@@ -39,13 +41,19 @@ try:
         print(f"HEAD_SHA={head_sha}")
 
     body = pull_request.get("body") or ""
-    match = None
-    for line in body.splitlines():
-        if re.match(r"^SYNC_SOURCE:[ \t]+\S.*$", line):
-            match = line
-            break
-    if match:
-        print(f"SYNC_SOURCE_MATCH={match}")
+    # Use re.MULTILINE (re.M) to match ^ at the start of any line.
+    # Capture the value after the label, allowing for optional trailing whitespace/CRLF.
+    matches = re.findall(r"^SYNC_SOURCE:[ \t]+(\S.*?)[ \t]*\r?$", body, re.M)
+    if len(matches) == 1:
+        value = matches[0].strip()
+        print(f"SYNC_SOURCE_VALUE={value}")
+        # Backward compatibility: print the full matched line.
+        print(f"SYNC_SOURCE_MATCH=SYNC_SOURCE: {value}")
+    elif len(matches) > 1:
+        print("SYNC_SOURCE_ERROR=multiple_matches")
+        value = matches[0].strip()
+        print(f"SYNC_SOURCE_VALUE={value}")
+        print(f"SYNC_SOURCE_MATCH=SYNC_SOURCE: {value}")
 except (OSError, json.JSONDecodeError, KeyError):
     raise SystemExit(0)
 PY
@@ -55,6 +63,10 @@ PY
     head_sha="$(printf '%s\n' "${event_info}" | sed -n 's/^HEAD_SHA=//p')"
     pr_sync_match="$(printf '%s\n' "${event_info}" | sed -n 's/^SYNC_SOURCE_MATCH=//p')"
     pr_sync_match="${pr_sync_match%$'\r'}"
+    pr_sync_value="$(printf '%s\n' "${event_info}" | sed -n 's/^SYNC_SOURCE_VALUE=//p')"
+    pr_sync_value="${pr_sync_value%$'\r'}"
+    pr_sync_error="$(printf '%s\n' "${event_info}" | sed -n 's/^SYNC_SOURCE_ERROR=//p')"
+    pr_sync_error="${pr_sync_error%$'\r'}"
   fi
 fi
 
@@ -126,9 +138,13 @@ report_error_and_exit() {
 sync_found=""
 
 if [[ -n "${pr_sync_match}" ]]; then
-  if has_sync_source_line "${pr_sync_match}"; then
-    sync_found="pr_body"
-  fi
+  : # Compatibility
+fi
+if [[ -n "${pr_sync_value}" ]]; then
+  sync_found="pr_body"
+fi
+if [[ "${pr_sync_error}" == "multiple_matches" ]]; then
+  printf '%s\n' "WARN: Mehrere SYNC_SOURCE Angaben im PR-Body gefunden. Verwende die erste aus Kompatibilitätsgründen." >&2
 fi
 
 if [[ -z "${sync_found}" ]]; then
