@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 declare -ar SYNC_SOURCE_FILES=(
   "contracts/SYNC_SOURCE.txt"
@@ -35,6 +34,7 @@ report_error_and_exit() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  set -euo pipefail
   PYTHON_BIN="${PYTHON_BIN:-python3}"
   if ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
     PYTHON_BIN="python"

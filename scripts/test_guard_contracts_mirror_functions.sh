@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # Source the script to get access to its functions without executing its main logic.
-source "$(dirname "$0")/guard_contracts_mirror.sh"
+if ! source "$(dirname "$0")/guard_contracts_mirror.sh"; then
+  echo "Failed to source guard_contracts_mirror.sh" >&2
+  exit 1
+fi
+
 
 test_cases=(
   "SYNC_SOURCE: value" "pass"
