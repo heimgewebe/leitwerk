@@ -39,13 +39,9 @@ try:
         print(f"HEAD_SHA={head_sha}")
 
     body = pull_request.get("body") or ""
-    match = None
-    for line in body.splitlines():
-        if re.match(r"^SYNC_SOURCE:[ \t]+\S.*$", line):
-            match = line
-            break
+    match = re.search(r"^SYNC_SOURCE:[ \t]+\S.*$", body, re.M)
     if match:
-        print(f"SYNC_SOURCE_MATCH={match}")
+        print(f"SYNC_SOURCE_MATCH={match.group(0).rstrip('\r')}")
 except (OSError, json.JSONDecodeError, KeyError):
     raise SystemExit(0)
 PY
