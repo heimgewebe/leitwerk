@@ -139,6 +139,11 @@ PY
     exit 0
   fi
 
+  # First-match acceptance strategy (early-exit):
+  # 1. PR-Body (highest priority)
+  # 2. Commit-Message
+  # 3. Sync-Files
+  # The first valid evidence found will immediately exit successfully (exit 0).
   if [[ "${pr_sync_error}" == "multiple_matches" ]]; then
     printf '%s\n' "WARN: Mehrere SYNC_SOURCE Angaben im PR-Body gefunden. Verwende die erste aus Kompatibilitätsgründen." >&2
   fi
