@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "leitwerk_repository_freeze",
+  "status": "ready_for_github_archive",
+  "bureau_task_id": "OPERATOR-ECOSYSTEM-REDUNDANCY-V1-T037",
+  "frozen_at": "2026-07-29T11:12:00+02:00",
+  "source": {
+    "repository": "heimgewebe/leitwerk",
+    "commit": "c241244d8e7613f6d4eaff7a6686c841444f1ade"
+  },
+  "canonical_migration": {
+    "repository": "heimgewebe/metarepo",
+    "pull_request": 667,
+    "merge_commit": "74ce9202952d00b0d2fef0587255c92a9cd05dee",
+    "contract": "contracts/operator/agent-change-boundaries.v1.json",
+    "inventory": "docs/archive/leitwerk-normative-freeze.v1.json"
+  },
+  "classification_counts": {
+    "files": 40,
+    "keep": 14,
+    "migrate": 5,
+    "retire": 21,
+    "remote_branches": 24
+  },
+  "repository_local_surfaces": {
+    "markdown": "historical_banner_added",
+    "legacy_schemas": "preserved_unchanged_and_retired",
+    "mirror_guards": "retire_when_repository_is_archived",
+    "workflows": "retire_when_repository_is_archived"
+  },
+  "truth_ownership": {
+    "tasks_claims_completion": "repo:bureau",
+    "local_execution_leases_recovery": "repo:grabowski",
+    "repositories_branches_pull_requests_reviews": "github",
+    "ecosystem_semantics": "repo:systemkatalog",
+    "event_history": "repo:chronik"
+  },
+  "archive_preconditions": {
+    "canonical_migration_merged": true,
+    "canonical_migration_ci_green": true,
+    "open_pull_requests_before_freeze": 0,
+    "legacy_branches_terminally_classified": true,
+    "github_archive_readback_required": true
+  },
+  "does_not_establish": [
+    "github_archived_state_before_readback",
+    "runtime_or_policy_authority",
+    "automatic_authority_transfer",
+    "permission_to_delete_historical_branches"
+  ]
+}
